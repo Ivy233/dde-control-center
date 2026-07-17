@@ -45,6 +45,7 @@ public Q_SLOTS:
     void setNTP(bool ntp);
     void setDatetime(const QDateTime &time);
     void set24HourType(bool state);
+    void setShowSeconds(bool showSeconds);
 #ifndef DCC_DISABLE_TIMEZONE
     void setTimezone(const QString &timezone);
     void removeUserTimeZone(const QString &zone);
@@ -102,6 +103,7 @@ private Q_SLOTS:
 private:
     void refreshNtpServerList();
     void initRegionFormatData();
+    void updateShowSecondsState();
     std::optional<QStringList> getSupportedLocale();
     void checkAndResolveConflicts();
 
@@ -113,6 +115,7 @@ private:
     DTK_CORE_NAMESPACE::DConfig *m_config;
     DTK_CORE_NAMESPACE::DConfig *m_datetimeConfig;
     DTK_CORE_NAMESPACE::DConfig *m_daemonTimedateConfig;
+    DTK_CORE_NAMESPACE::DConfig *m_trayDatetimeConfig;
     std::optional<QStringList> m_supportedLocaleList;
 };
 
