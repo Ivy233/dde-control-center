@@ -561,6 +561,42 @@ DccObject {
         }
     }
 
+    // 任务栏时间显示秒数
+    DccObject {
+        id: traySecondsGroup
+        visible: dccData.showSecondsAvailable
+        name: "traySecondsGroup"
+        parentName: "datetime"
+        weight: 22
+        pageType: DccObject.Item
+        page: DccGroupView {}
+
+        onParentItemChanged: item => {
+            if (item) {
+                item.topPadding = 10
+                item.bottomPadding = 5
+            }
+        }
+
+        DccObject {
+            id: showSecondsSettings
+            property bool secondsOn: dccData.showSeconds
+            name: "showSeconds"
+            parentName: "traySecondsGroup"
+            displayName: qsTr("Show seconds in tray time")
+            weight: 10
+            backgroundType: DccObject.Normal
+            pageType: DccObject.Editor
+            page: Switch {
+                enabled: dccData.showSecondsEnabled
+                checked: showSecondsSettings.secondsOn
+                onCheckedChanged: {
+                    dccData.showSeconds = checked
+                }
+            }
+        }
+    }
+
     component ItemZoneComp: DccObject {
         property int shift: 8
         property string zoneId
