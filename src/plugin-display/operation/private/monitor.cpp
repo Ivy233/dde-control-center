@@ -166,7 +166,7 @@ void Monitor::setModeList(const ResolutionList &modeList)
     miniMode << 1024 << 768;
 
     for (auto m : modeList) {
-        if (m.width() >= miniMode.at(0) && m.height() >= miniMode.at(1)) {
+        if (qMax(m.width(), m.height()) >= miniMode.at(0) && qMin(m.width(), m.height()) >= miniMode.at(1)) {
             m_modeList.append(m);
         }
     }
