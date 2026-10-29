@@ -863,18 +863,22 @@ void DatetimeModel::setCurrentFormat(int format, int index)
     }
     case LongDate: {
         setConfig(index, longDateFormat_key, regionFormat.longDatesAvailable);
+        m_work->setLongDateFormat(index);
         break;
     }
     case ShortDate: {
         setConfig(index, shortDateFormat_key, regionFormat.shortDatesAvailable);
+        m_work->setShortDateFormat(index);
         break;
     }
     case LongTime:{
         setConfig(index, longTimeFormat_key, regionFormat.longTimesAvailable);
+        m_work->setLongTimeFormat(index);
         break;
     }
     case ShortTime: {
         setConfig(index, shortTimeFormat_key, regionFormat.shortTimesAvailable);
+        m_work->setShortTimeFormat(index);
         break;
     }
     // currency formats
