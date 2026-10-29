@@ -11,17 +11,32 @@
 REAL_BINARY="/usr/libexec/deepin/dde-control-center"
 LOADER="/usr/bin/deepin-security-loader"
 LOADER_EXEC="/usr/bin/deepin-security-loader-exec"
+PERMISSION_DIR="/usr/share/dde-control-center/permission-interfaces"
 
 # Log to systemd journal with tag "dde-control-center"
 log_to_journal() {
     logger -t dde-control-center -p user.info "$1"
 }
 
+# The security loader waits for a D-Bus registration handshake and kills the
+# child if it receives no data. The control center skips the handshake when no
+# permission config is available, so only use the loader when at least one
+# readable config exists.
+has_permission_config() {
+    local f
+    [ -d "$PERMISSION_DIR" ] || return 1
+    for f in "$PERMISSION_DIR"/*.json; do
+        [ -f "$f" ] && [ -r "$f" ] && return 0
+    done
+    return 1
+}
+
 # Log startup
 log_to_journal "dde-control-center launched with args: $*"
 
-# Check if loader is available and has proper capabilities
-if [ -x "$LOADER" ] && [ -x "$LOADER_EXEC" ]; then
+# Check if loader is available, has proper capabilities and has a permission
+# config to register. Otherwise the loader would time out and kill the child.
+if [ -x "$LOADER" ] && [ -x "$LOADER_EXEC" ] && has_permission_config; then
     if getcap "$LOADER_EXEC" 2>/dev/null | grep -q cap_setgid; then
         # Launch via loader with authorization groups
         log_to_journal "Using deepin-security-loader with authorization groups"
